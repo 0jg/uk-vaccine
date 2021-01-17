@@ -32,7 +32,7 @@ export default function Home(props) {
             <LineSeries data={targets} color="#a15dd7" style={{strokeWidth: 5}}/>
           </FlexibleXYPlot>
         </div>
-        <footer className="text-sm text-gray-400">Made by <a href="https://twitter.com/__jackg">@__jackg</a></footer>
+        <footer className="text-sm text-gray-500">Made by <a href="https://twitter.com/__jackg">@__jackg</a>. Code available at <a href="https://github.com/j-griffiths/uk-vaccine">GitHub</a>.</footer>
     </main>
   )
 }
