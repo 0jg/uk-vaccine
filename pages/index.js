@@ -37,9 +37,9 @@ export default function Home(props) {
   return (
     <main className="flex flex-col items-center justify-center w-screen m-auto min-h-screen dark:bg-black dark:text-white text-center">
       <div className="max-w-screen-md">
-        <h1 className="text-5xl md:text-7xl font-bold leading-tighter pt-24 px-4">🇬🇧 Vaccines Administered</h1>
-        <h2 className="text-3xl md:text-4xl leading-tight py-4 px-4"><span className="text-blue-500">Cumulative vaccines</span> by date compared to the <span className="text-purple-500">target of 15 million first doses</span> by Feb 15.</h2>
-        <h3 className="text-xl md:text-2xl leading-normal pb-4">The UK has given {props.values[props.values.length-1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} initial doses so far. <br/><span className="text-gray-400 text-lg">({Math.round(100*props.values[props.values.length-1]/15000000)}% of target)</span></h3>
+        <h1 className="text-5xl md:text-7xl font-bold leading-tighter pt-24 px-2">🇬🇧 Vaccines Administered</h1>
+        <h2 className="text-3xl md:text-4xl leading-tight py-4 px-2"><span className="text-blue-500">Cumulative vaccines</span> by date compared to the <span className="text-purple-500">target of 15 million first doses</span> by Feb 15.</h2>
+        <h3 className="text-xl md:text-2xl leading-normal pb-4 px-8">The UK has given {props.values[props.values.length-1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} initial doses so far. <span className="text-gray-400 text-lg">({Math.round(100*props.values[props.values.length-1]/15000000)}% of target)</span></h3>
         <div className="w-full h-screen m-auto py-10 pr-10">
           <FlexibleXYPlot xType="time" yDomain={[0,20000000]} margin={{left: 110, bottom:110 }} className="m-auto dark:text-white text-black fill-current text-md">
             <HorizontalGridLines className="dark:text-gray-600 text-gray-300 border w-4 stroke-1 stroke-current"/>
