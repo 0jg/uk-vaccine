@@ -38,7 +38,7 @@ export default function Home(props) {
     <main className="flex flex-col items-center justify-center w-screen m-auto min-h-screen dark:bg-black dark:text-white text-center">
       <div className="max-w-screen-md">
         <h1 className="text-5xl md:text-7xl font-bold leading-tighter pt-24 px-4">🇬🇧 Vaccines Administered</h1>
-        <h2 className="text-3xl md:text-4xl leading-tight py-4 px-4"><span className="text-rose-500">Cumulative vaccines</span> by date compared to the <span className="text-purple-500">target of 15 million first doses</span> by Feb 15.</h2>
+        <h2 className="text-3xl md:text-4xl leading-tight py-4 px-4"><span className="text-blue-500">Cumulative vaccines</span> by date compared to the <span className="text-purple-500">target of 15 million first doses</span> by Feb 15.</h2>
         <h3 className="text-xl md:text-2xl leading-normal pb-4">The UK has given {props.values[props.values.length-1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} initial doses so far. <br/><span className="text-gray-400 text-lg">({Math.round(100*props.values[props.values.length-1]/15000000)}% of target)</span></h3>
         <div className="w-full h-screen m-auto py-10 pr-10">
           <FlexibleXYPlot xType="time" yDomain={[0,20000000]} margin={{left: 110, bottom:110 }} className="m-auto dark:text-white text-black fill-current text-md">
@@ -49,7 +49,7 @@ export default function Home(props) {
             <LineSeries data={trend2m} color="#fe9f09" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
             <LineSeries data={trend3m} color="#30d158" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
             <LabelSeries data={[{x: new Date("2021-02-15T00:00:00.000Z"),y:17500000,label:"3m/week"},{x: new Date("2021-02-14T00:00:00.000Z"),y:15350000,label:"Target"},{x: new Date("2021-02-15T00:00:00.000Z"),y:13200000,label:"2m/week"},{x: new Date("2021-02-15T00:00:00.000Z"),y:8500000,label:"1m/week"}]} className="text-green fill-current"/>
-            <LineSeries data={data} color="#e74759" strokeWidth={5} className="text-transparent fill-current"/>
+            <LineSeries data={data} color="#037aff" strokeWidth={5} className="text-transparent fill-current"/>
             <MarkSeries color="#af52de" strokeWidth={10} data={[{x: new Date("2021-02-15T00:00:00.000Z"),y:15000000}]}/>
           </FlexibleXYPlot>
         </div>
