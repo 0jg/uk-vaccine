@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import csv from 'csv-parser'
-import Moment from 'moment';
+import moment from 'moment';
 import dateArray from 'moment-array-dates';
 import '../node_modules/react-vis/dist/style.css';
-import {ChartLabel, FlexibleXYPlot, HorizontalGridLines, LineSeries, XAxis, YAxis} from 'react-vis';
+import {Hint, ChartLabel, FlexibleXYPlot, HorizontalGridLines, LineSeries, XAxis, YAxis} from 'react-vis';
 
 export default function Home(props) {
 
@@ -20,7 +20,8 @@ export default function Home(props) {
   return (
     <main className="flex flex-col items-center justify-center min-w-screen max-w-screen-md m-auto min-h-screen dark:bg-black dark:text-white p-10 text-center">
         <h1 className="text-7xl font-bold leading-tighter pb-8">🇬🇧 Vaccines Administered</h1>
-        <h2 className="text-4xl leading-tight"><span className="text-rose-500">Cumulative vaccines</span> by date compared to the <span className="text-purple-500">target of 15 million doses</span> by Feb 15.</h2>
+        <h2 className="text-4xl leading-tight"><span className="text-rose-500">Cumulative vaccines</span> by date compared to the <span className="text-purple-500">target of 15 million first doses</span> by Feb 15.</h2>
+        <h3 className="text-2xl leading-normal py-4">Total as of {moment().subtract('1','day').format("MMM D").toString('')}: {props.values[props.values.length-1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} doses <span className="text-gray-400">({Math.round(100*props.values[props.values.length-1]/15000000)}% of target)</span></h3>
         <div className="w-full h-96 py-10">
           <FlexibleXYPlot xType="time" margin={{left: 100, bottom: 60, right: 60}} style={{fontSize:'20px'}} yDomain={[1,20000000]}>
           <ChartLabel text="Cumulative vaccinations" className="alt-y-label" includeMargin={false} xPercent={-0.14} style={{ transform: 'rotate(-90)', textAnchor: 'end', fontSize: '2em' }} />
