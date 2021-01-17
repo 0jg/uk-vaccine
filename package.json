@@ -8,8 +8,21 @@
     "start": "next start"
   },
   "dependencies": {
+    "apexcharts": "^3.23.1",
+    "autoprefixer": "^10.2.1",
+    "chart.js": "^2.9.4",
+    "csv-parser": "^3.0.0",
+    "fs": "0.0.1-security",
+    "moment": "^2.29.1",
+    "moment-array-dates": "^2.0.3",
     "next": "10.0.5",
+    "postcss": "^8.2.4",
     "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "react-charts": "^2.0.0-beta.7",
+    "react-csv-reader": "^3.1.2",
+    "react-dom": "17.0.1",
+    "react-moment": "^1.1.1",
+    "react-vis": "^1.11.7",
+    "tailwindcss": "^2.0.2"
   }
 }
