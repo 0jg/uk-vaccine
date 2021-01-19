@@ -59,7 +59,7 @@ export default function Home(props) {
   )
 }
 
-export async function getStaticProps(){
+export async function getServerSideProps(){
 
   let values = []
 
