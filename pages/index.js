@@ -6,12 +6,21 @@ import {MarkSeries, LabelSeries, ChartLabel, FlexibleXYPlot, HorizontalGridLines
 
 export default function Home(props) {
 
+  if(props.error){
+    return(
+      <div className="w-screen h-screen flex flex-col justify-center items-center">
+        <h1 className="text-5xl pb-4">Daily data updating...</h1>
+        <h2 className="text-3xl">Try again in 15 minutes.</h2>
+      </div>
+    )
+  }
+
   const labels = dateArray.range(new Date('2021-01-10'), new Date('2021-02-15'))
   labels.reverse()
 
   // Initialise arrays
   let data = []
-  let trend1m = []
+  let trend4m = []
   let trend2m = []
   let trend3m = []
 
@@ -19,15 +28,15 @@ export default function Home(props) {
   labels.forEach((item, i) => {
     const date = new Date(item)
     data.push({x:date, y:props.values[i]})
-    trend1m.push({x:date, y:props.values[i]})
+    trend4m.push({x:date, y:props.values[i]})
     trend2m.push({x:date, y:props.values[i]})
     trend3m.push({x:date, y:props.values[i]})
   });
 
   let i = 0
   do{
-    if(trend1m[i].y === undefined){
-      trend1m[i].y = trend1m[i-1].y+1e6/7
+    if(trend2m[i].y === undefined){
+      trend4m[i].y = trend4m[i-1].y+4e6/7
       trend2m[i].y = trend2m[i-1].y+2e6/7
       trend3m[i].y = trend3m[i-1].y+3e6/7
     }
@@ -45,10 +54,10 @@ export default function Home(props) {
             <HorizontalGridLines className="dark:text-gray-600 text-gray-300 border w-4 stroke-1 stroke-current"/>
             <XAxis title="Publication date" tickLabelAngle={-90} className="stroke-1 stroke-current font-extralight text-sm"/>
             <YAxis title="Cumulative vaccines" tickFormat={v => v/1e6+" million"} className="stroke-1 stroke-current font-extralight text-sm"/>
-            <LineSeries data={trend1m} color="#ff453a" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
+            <LineSeries data={trend4m} color="#ff453a" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
             <LineSeries data={trend2m} color="#fe9f09" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
             <LineSeries data={trend3m} color="#30d158" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
-            <LabelSeries data={[{x: new Date("2021-02-15T00:00:00.000Z"),y:17500000,label:"3m/week"},{x: new Date("2021-02-14T00:00:00.000Z"),y:15350000,label:"Target"},{x: new Date("2021-02-15T00:00:00.000Z"),y:13200000,label:"2m/week"},{x: new Date("2021-02-15T00:00:00.000Z"),y:8500000,label:"1m/week"}]} className="text-green fill-current"/>
+            <LabelSeries data={[{x: new Date("2021-02-15T00:00:00.000Z"),y:17500000,label:"3m/week"},{x: new Date("2021-02-14T00:00:00.000Z"),y:15350000,label:"Target"},{x: new Date("2021-02-15T00:00:00.000Z"),y:13200000,label:"2m/week"},{x: new Date("2021-02-15T00:00:00.000Z"),y:8500000,label:"4m/week"}]} className="text-green fill-current"/>
             <LineSeries data={data} color="#037aff" strokeWidth={5} className="text-transparent fill-current"/>
             <MarkSeries color="#af52de" strokeWidth={10} data={[{x: new Date("2021-02-15T00:00:00.000Z"),y:15000000}]}/>
           </FlexibleXYPlot>
@@ -62,6 +71,7 @@ export default function Home(props) {
 export async function getServerSideProps(){
 
   let values = []
+  let error
 
   const res = await fetch("https://api.coronavirus.data.gov.uk/v2/data?areaType=overview&metric=cumPeopleVaccinatedFirstDoseByPublishDate&format=json")
   .then(response => response.json())
@@ -72,12 +82,14 @@ export async function getServerSideProps(){
   })
   .catch((err) => {
     console.error(err)
+    error = true
   })
 
   values.reverse()
 
   return{
     props:{
+      error,
       values
     }
   }
