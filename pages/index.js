@@ -54,10 +54,10 @@ export default function Home(props) {
             <HorizontalGridLines className="dark:text-gray-600 text-gray-300 border w-4 stroke-1 stroke-current"/>
             <XAxis title="Publication date" tickLabelAngle={-90} className="stroke-1 stroke-current font-extralight text-sm"/>
             <YAxis title="Cumulative vaccines" tickFormat={v => v/1e6+" million"} className="stroke-1 stroke-current font-extralight text-sm"/>
-            <LineSeries data={trend4m} color="#ff453a" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
-            <LineSeries data={trend2m} color="#fe9f09" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
-            <LineSeries data={trend3m} color="#30d158" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
-            <LabelSeries data={[{x: new Date("2021-02-15T00:00:00.000Z"),y:17500000,label:"3m/week"},{x: new Date("2021-02-14T00:00:00.000Z"),y:15350000,label:"Target"},{x: new Date("2021-02-15T00:00:00.000Z"),y:13200000,label:"2m/week"},{x: new Date("2021-02-15T00:00:00.000Z"),y:8500000,label:"4m/week"}]} className="text-green fill-current"/>
+            <LineSeries data={trend2m} color="#ff453a" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
+            <LineSeries data={trend3m} color="#fe9f09" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
+            <LineSeries data={trend4m} color="#30d158" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
+            <LabelSeries data={[{x: new Date("2021-02-15T00:00:00.000Z"),y:16000000,label:"3m/week"},{x: new Date("2021-02-15T00:00:00.000Z"),y:13500000,label:"2m/week"},{x: new Date("2021-02-15T00:00:00.000Z"),y:18600000,label:"4m/week"}]} className="text-green fill-current"/>
             <LineSeries data={data} color="#037aff" strokeWidth={5} className="text-transparent fill-current"/>
             <MarkSeries color="#af52de" strokeWidth={10} data={[{x: new Date("2021-02-15T00:00:00.000Z"),y:15000000}]}/>
           </FlexibleXYPlot>
@@ -79,6 +79,7 @@ export async function getServerSideProps(){
     data.body.forEach(e => {
       values.push(e.cumPeopleVaccinatedFirstDoseByPublishDate)
     });
+    error = false
   })
   .catch((err) => {
     console.error(err)
