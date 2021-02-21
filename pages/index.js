@@ -1,7 +1,6 @@
 import Head from "next/head";
 import moment from "moment";
 import dateArray from "moment-array-dates";
-//import "../node_modules/react-vis/dist/style.css";
 import {
 	MarkSeries,
 	LabelSeries,
@@ -34,29 +33,13 @@ export default function Home(props) {
 	// Initialise arrays
 	let dataFirstDose = [];
 	let dataSecondDose = [];
-	let trend4m = [];
-	let trend2m = [];
-	let trend3m = [];
 
 	// Add data points to array
 	labels.forEach((item, i) => {
 		const date = new Date(item);
 		dataFirstDose.push({x: date, y: props.valuesFirstDose[i], y0: 0});
 		dataSecondDose.push({x: date, y: props.valuesSecondDose[i], y0: 0});
-		trend4m.push({x: date, y: props.valuesFirstDose[i], y0: 0});
-		trend2m.push({x: date, y: props.valuesFirstDose[i], y0: 0});
-		trend3m.push({x: date, y: props.valuesFirstDose[i], y0: 0});
 	});
-
-	let i = 0;
-	do {
-		if (trend2m[i].y === undefined) {
-			trend2m[i].y = trend2m[i - 1].y + 0.25e6 / 7;
-			trend3m[i].y = trend3m[i - 1].y + 0.5e6 / 7;
-			trend4m[i].y = trend4m[i - 1].y + 0.75e6 / 7;
-		}
-		i = i + 1;
-	} while (i <= 160);
 
 	return (
 		<main className="flex flex-col items-center justify-center w-screen m-auto min-h-screen dark:bg-black dark:text-white text-center">
