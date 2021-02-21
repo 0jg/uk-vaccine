@@ -1,97 +1,225 @@
-import Head from 'next/head'
-import moment from 'moment';
-import dateArray from 'moment-array-dates';
-//import '../node_modules/react-vis/dist/style.css';
-import {MarkSeries, LabelSeries, ChartLabel, FlexibleXYPlot, HorizontalGridLines, LineSeries, XAxis, YAxis} from 'react-vis';
+import Head from "next/head";
+import moment from "moment";
+import dateArray from "moment-array-dates";
+//import "../node_modules/react-vis/dist/style.css";
+import {
+	MarkSeries,
+	LabelSeries,
+	ChartLabel,
+	FlexibleXYPlot,
+	AreaSeries,
+	HorizontalGridLines,
+	LineSeries,
+	XAxis,
+	YAxis,
+	Crosshair
+} from "react-vis";
 
 export default function Home(props) {
+	if (props.error) {
+		return (
+			<div className="w-screen h-screen flex flex-col justify-center items-center">
+				<h1 className="text-5xl pb-4">Daily data updating...</h1>
+				<h2 className="text-3xl">Try again in 15 minutes.</h2>
+			</div>
+		);
+	}
 
-  if(props.error){
-    return(
-      <div className="w-screen h-screen flex flex-col justify-center items-center">
-        <h1 className="text-5xl pb-4">Daily data updating...</h1>
-        <h2 className="text-3xl">Try again in 15 minutes.</h2>
-      </div>
-    )
-  }
+	const labels = dateArray.range(
+		new Date("2021-01-10"),
+		new Date("2021-07-31")
+	);
+	labels.reverse();
 
-  const labels = dateArray.range(new Date('2021-01-10'), new Date('2021-02-15'))
-  labels.reverse()
+	// Initialise arrays
+	let dataFirstDose = [];
+	let dataSecondDose = [];
+	let trend4m = [];
+	let trend2m = [];
+	let trend3m = [];
 
-  // Initialise arrays
-  let data = []
-  let trend4m = []
-  let trend2m = []
-  let trend3m = []
+	// Add data points to array
+	labels.forEach((item, i) => {
+		const date = new Date(item);
+		dataFirstDose.push({x: date, y: props.valuesFirstDose[i], y0: 0});
+		dataSecondDose.push({x: date, y: props.valuesSecondDose[i], y0: 0});
+		trend4m.push({x: date, y: props.valuesFirstDose[i], y0: 0});
+		trend2m.push({x: date, y: props.valuesFirstDose[i], y0: 0});
+		trend3m.push({x: date, y: props.valuesFirstDose[i], y0: 0});
+	});
 
-  // Add data points to array
-  labels.forEach((item, i) => {
-    const date = new Date(item)
-    data.push({x:date, y:props.values[i]})
-    trend4m.push({x:date, y:props.values[i]})
-    trend2m.push({x:date, y:props.values[i]})
-    trend3m.push({x:date, y:props.values[i]})
-  });
+	let i = 0;
+	do {
+		if (trend2m[i].y === undefined) {
+			trend2m[i].y = trend2m[i - 1].y + 0.25e6 / 7;
+			trend3m[i].y = trend3m[i - 1].y + 0.5e6 / 7;
+			trend4m[i].y = trend4m[i - 1].y + 0.75e6 / 7;
+		}
+		i = i + 1;
+	} while (i <= 160);
 
-  let i = 0
-  do{
-    if(trend2m[i].y === undefined){
-      trend4m[i].y = trend4m[i-1].y+4e6/7
-      trend2m[i].y = trend2m[i-1].y+2e6/7
-      trend3m[i].y = trend3m[i-1].y+3e6/7
-    }
-    i = i+1
-  } while(i <= 36)
-
-  return (
-    <main className="flex flex-col items-center justify-center w-screen m-auto min-h-screen dark:bg-black dark:text-white text-center">
-      <div className="max-w-screen-md">
-        <h1 className="text-5xl md:text-7xl font-bold leading-tighter pt-24 px-2">🇬🇧 Vaccines Administered</h1>
-        <h2 className="text-3xl md:text-4xl leading-tight py-4 px-2"><span className="text-blue-500">Cumulative vaccines</span> by date compared to the <span className="text-purple-500">target of 15 million first doses</span> by Feb 15.</h2>
-        <h3 className="text-xl md:text-2xl leading-normal pb-4 px-8">The UK has given {props.values[props.values.length-1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} initial doses so far. <span className="text-gray-400 text-lg">({Math.round(100*props.values[props.values.length-1]/15000000)}% of target)</span></h3>
-        <div className="w-full h-screen m-auto py-10 pr-10">
-          <FlexibleXYPlot xType="time" yDomain={[0,20000000]} margin={{left: 110, bottom:110 }} className="m-auto dark:text-white text-black fill-current text-md">
-            <HorizontalGridLines className="dark:text-gray-600 text-gray-300 border w-4 stroke-1 stroke-current"/>
-            <XAxis title="Publication date" tickLabelAngle={-90} className="stroke-1 stroke-current font-extralight text-sm"/>
-            <YAxis title="Cumulative vaccines" tickFormat={v => v/1e6+" million"} className="stroke-1 stroke-current font-extralight text-sm"/>
-            <LineSeries data={trend2m} color="#ff453a" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
-            <LineSeries data={trend3m} color="#fe9f09" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
-            <LineSeries data={trend4m} color="#30d158" strokeWidth={2} strokeStyle="dashed" className="text-transparent fill-current"/>
-            <LabelSeries data={[{x: new Date("2021-02-15T00:00:00.000Z"),y:16000000,label:"3m/week"},{x: new Date("2021-02-15T00:00:00.000Z"),y:13500000,label:"2m/week"},{x: new Date("2021-02-15T00:00:00.000Z"),y:18600000,label:"4m/week"}]} className="text-green fill-current"/>
-            <LineSeries data={data} color="#037aff" strokeWidth={5} className="text-transparent fill-current"/>
-            <MarkSeries color="#af52de" strokeWidth={10} data={[{x: new Date("2021-02-15T00:00:00.000Z"),y:15000000}]}/>
-          </FlexibleXYPlot>
-        </div>
-        <footer className="text-sm text-gray-500 pb-10">Made by <a href="https://twitter.com/__jackg">@__jackg</a>. Code available at <a href="https://github.com/j-griffiths/uk-vaccine">GitHub</a>. Data from <a href="https://coronavirus.data.gov.uk/details/download">GOV.UK</a>.</footer>
-      </div>
-    </main>
-  )
+	return (
+		<main className="flex flex-col items-center justify-center w-screen m-auto min-h-screen dark:bg-black dark:text-white text-center">
+			<div className="w-screen md:max-w-screen-lg">
+				<h1 className="text-5xl md:text-7xl font-bold leading-tighter pt-24 px-2">
+					🇬🇧 Vaccines Administered
+				</h1>
+				<h2 className="text-3xl md:text-4xl leading-tight py-4 px-2">
+					Cumulative <span style={{color: "rgb(248, 3, 83)"}}>first</span> and{" "}
+					<span style={{color: "rgb(161, 93, 215)"}}>second</span> doses by
+					date.
+				</h2>
+				<h3 className="text-xl md:text-2xl leading-normal pb-4 px-8">
+					The UK has given a first dose to{" "}
+					{Math.round(
+						(100 * props.valuesFirstDose[props.valuesFirstDose.length - 1]) /
+							50000000
+					)}
+					% of all adults{" "}
+					<span className="inline-block">
+						(
+						{props.valuesFirstDose[props.valuesFirstDose.length - 1]
+							.toString()
+							.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+						people)
+					</span>{" "}
+					and has fully vaccinated{" "}
+					{Math.round(
+						(100 * props.valuesSecondDose[props.valuesSecondDose.length - 1]) /
+							50000000
+					)}
+					% of all adults{" "}
+					<span className="inline-block">
+						(
+						{props.valuesSecondDose[props.valuesSecondDose.length - 1]
+							.toString()
+							.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+						people)
+					</span>
+					.
+				</h3>
+				<div className="w-full h-screen m-auto py-10 pr-10">
+					<FlexibleXYPlot
+						xType="time"
+						yDomain={[0, 50000000]}
+						margin={{left: 110, bottom: 110}}
+						className="m-auto dark:text-white text-black fill-current text-md"
+					>
+						<HorizontalGridLines className="dark:text-gray-600 text-gray-300 border w-4 stroke-1 stroke-current" />
+						<XAxis
+							title="Publication date"
+							tickLabelAngle={-90}
+							className="stroke-1 stroke-current font-extralight text-sm"
+						/>
+						<YAxis
+							title="Cumulative vaccines"
+							tickFormat={v => v / 1e6 + " million"}
+							className="stroke-1 stroke-current font-extralight text-sm"
+						/>
+						<LineSeries
+							data={dataFirstDose}
+							color="rgb(248, 3, 83)"
+							strokeWidth={5}
+							className="text-transparent fill-current"
+						/>
+						<LineSeries
+							data={dataSecondDose}
+							color="rgb(161, 93, 215)"
+							strokeWidth={5}
+							className="text-transparent fill-current"
+						/>
+						<MarkSeries
+							color="rgb(13, 132, 255)"
+							strokeWidth={5}
+							data={[{x: new Date("2021-02-15T00:00:00.000Z"), y: 15000000}]}
+						/>
+						<MarkSeries
+							color="rgb(254, 159, 9)"
+							strokeWidth={5}
+							data={[{x: new Date("2021-04-15T00:00:00.000Z"), y: 32000000}]}
+						/>
+						<MarkSeries
+							color="rgb(48, 209, 88)"
+							strokeWidth={5}
+							data={[{x: new Date("2021-07-31T00:00:00.000Z"), y: 50000000}]}
+						/>
+						<LabelSeries
+							data={[
+								{
+									x: new Date("2021-02-15T00:00:00.000Z"),
+									y: 15000000,
+									label: "Over 70 and extremely vulnerable"
+								},
+								{
+									x: new Date("2021-04-15T00:00:00.000Z"),
+									y: 32000000,
+									label: "Over 50 and at risk"
+								},
+								{
+									x: new Date("2021-07-31T00:00:00.000Z"),
+									y: 50000000,
+									label: "All adults"
+								}
+							]}
+							className="text-green fill-current"
+						/>
+					</FlexibleXYPlot>
+				</div>
+				<footer className="text-sm text-gray-500 pb-10">
+					Made by <a href="https://twitter.com/__jackg">@__jackg</a>. Code
+					available at{" "}
+					<a href="https://github.com/j-griffiths/uk-vaccine">GitHub</a>. Data
+					from{" "}
+					<a href="https://coronavirus.data.gov.uk/details/download">GOV.UK</a>.
+				</footer>
+			</div>
+		</main>
+	);
 }
 
-export async function getServerSideProps(){
+export async function getServerSideProps() {
+	let valuesFirstDose = [];
+	let valuesSecondDose = [];
+	let error;
 
-  let values = []
-  let error
+	let resFirstDose = await fetch(
+		"https://api.coronavirus.data.gov.uk/v2/data?areaType=overview&metric=cumPeopleVaccinatedFirstDoseByPublishDate&format=json"
+	)
+		.then(response => response.json())
+		.then(data => {
+			data.body.forEach(e => {
+				valuesFirstDose.push(e.cumPeopleVaccinatedFirstDoseByPublishDate);
+			});
+			error = false;
+		})
+		.catch(err => {
+			console.error(err);
+			error = true;
+		});
 
-  const res = await fetch("https://api.coronavirus.data.gov.uk/v2/data?areaType=overview&metric=cumPeopleVaccinatedFirstDoseByPublishDate&format=json")
-  .then(response => response.json())
-  .then((data) => {
-    data.body.forEach(e => {
-      values.push(e.cumPeopleVaccinatedFirstDoseByPublishDate)
-    });
-    error = false
-  })
-  .catch((err) => {
-    console.error(err)
-    error = true
-  })
+	let resSecondDose = await fetch(
+		"https://api.coronavirus.data.gov.uk/v2/data?areaType=overview&metric=cumPeopleVaccinatedSecondDoseByPublishDate&format=json"
+	)
+		.then(response => response.json())
+		.then(data => {
+			data.body.forEach(e => {
+				valuesSecondDose.push(e.cumPeopleVaccinatedSecondDoseByPublishDate);
+			});
+			error = false;
+		})
+		.catch(err => {
+			console.error(err);
+			error = true;
+		});
 
-  values.reverse()
+	valuesFirstDose.reverse();
+	valuesSecondDose.reverse();
 
-  return{
-    props:{
-      error,
-      values
-    }
-  }
+	return {
+		props: {
+			error,
+			valuesFirstDose,
+			valuesSecondDose
+		}
+	};
 }
