@@ -131,7 +131,7 @@ export default function Home(props) {
 								{
 									x: new Date("2021-02-15T00:00:00.000Z"),
 									y: 15000000,
-									label: "Over 70 and extremely vulnerable"
+									label: "Over 70 and vulnerable"
 								},
 								{
 									x: new Date("2021-04-15T00:00:00.000Z"),
