@@ -56,7 +56,7 @@ export default function Home(props) {
 					The UK has given a first dose to{" "}
 					{Math.round(
 						(100 * props.valuesFirstDose[props.valuesFirstDose.length - 1]) /
-							50000000
+							53000000
 					)}
 					% of all adults{" "}
 					<span className="inline-block">
@@ -69,7 +69,7 @@ export default function Home(props) {
 					and has fully vaccinated{" "}
 					{Math.round(
 						(100 * props.valuesSecondDose[props.valuesSecondDose.length - 1]) /
-							50000000
+							53000000
 					)}
 					% of all adults{" "}
 					<span className="inline-block">
