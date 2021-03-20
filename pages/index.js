@@ -140,7 +140,7 @@ export default function Home(props) {
 								},
 								{
 									x: new Date("2021-07-31T00:00:00.000Z"),
-									y: 50000000,
+									y: 53000000,
 									label: "All adults"
 								}
 							]}
