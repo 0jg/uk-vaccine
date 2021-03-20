@@ -56,7 +56,7 @@ export default function Home(props) {
 					The UK has given a first dose to{" "}
 					{Math.round(
 						(100 * props.valuesFirstDose[props.valuesFirstDose.length - 1]) /
-							53000000
+							52632729
 					)}
 					% of all adults{" "}
 					<span className="inline-block">
@@ -69,7 +69,7 @@ export default function Home(props) {
 					and has fully vaccinated{" "}
 					{Math.round(
 						(100 * props.valuesSecondDose[props.valuesSecondDose.length - 1]) /
-							53000000
+							52632729
 					)}
 					% of all adults{" "}
 					<span className="inline-block">
@@ -84,7 +84,7 @@ export default function Home(props) {
 				<div className="w-full h-screen m-auto py-10 pr-10">
 					<FlexibleXYPlot
 						xType="time"
-						yDomain={[0, 53000000]}
+						yDomain={[0, 52632729]}
 						margin={{left: 110, bottom: 110}}
 						className="m-auto dark:text-white text-black fill-current text-md"
 					>
@@ -124,7 +124,7 @@ export default function Home(props) {
 						<MarkSeries
 							color="rgb(48, 209, 88)"
 							strokeWidth={5}
-							data={[{x: new Date("2021-07-31T00:00:00.000Z"), y: 53000000}]}
+							data={[{x: new Date("2021-07-31T00:00:00.000Z"), y: 52632729}]}
 						/>
 						<LabelSeries
 							data={[
@@ -140,7 +140,7 @@ export default function Home(props) {
 								},
 								{
 									x: new Date("2021-07-31T00:00:00.000Z"),
-									y: 53000000,
+									y: 52632729,
 									label: "All adults"
 								}
 							]}
