@@ -84,7 +84,7 @@ export default function Home(props) {
 				<div className="w-full h-screen m-auto py-10 pr-10">
 					<FlexibleXYPlot
 						xType="time"
-						yDomain={[0, 50000000]}
+						yDomain={[0, 53000000]}
 						margin={{left: 110, bottom: 110}}
 						className="m-auto dark:text-white text-black fill-current text-md"
 					>
