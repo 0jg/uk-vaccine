@@ -26,7 +26,7 @@ export default function Home(props) {
 
 	const labels = dateArray.range(
 		new Date("2021-01-10"),
-		new Date("2021-07-31")
+		new Date("2021-09-31")
 	);
 	labels.reverse();
 
@@ -139,9 +139,9 @@ export default function Home(props) {
 									label: "Over 50 and at risk"
 								},
 								{
-									x: new Date("2021-07-31T00:00:00.000Z"),
+									x: new Date("2021-06-17T00:00:00.000Z"),
 									y: 52632729,
-									label: "All adults"
+									label: "All adults offered"
 								}
 							]}
 							className="text-green fill-current"
