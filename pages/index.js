@@ -124,7 +124,7 @@ export default function Home(props) {
 						<MarkSeries
 							color="rgb(48, 209, 88)"
 							strokeWidth={5}
-							data={[{x: new Date("2021-07-31T00:00:00.000Z"), y: 52632729}]}
+							data={[{x: new Date("2021-09-31T00:00:00.000Z"), y: 52632729}]}
 						/>
 						<LabelSeries
 							data={[
@@ -139,9 +139,9 @@ export default function Home(props) {
 									label: "Over 50 and at risk"
 								},
 								{
-									x: new Date("2021-06-17T00:00:00.000Z"),
+									x: new Date("2021-09-31T00:00:00.000Z"),
 									y: 52632729,
-									label: "All adults offered"
+									label: "All adults"
 								}
 							]}
 							className="text-green fill-current"
