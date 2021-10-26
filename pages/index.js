@@ -70,10 +70,10 @@ export default function Home(props) {
 					{props.valuesFirstDose[props.valuesFirstDose.length - 1]
 						.toString()
 						.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-					people aged 12+,<br/> {props.valuesSecondDose[props.valuesSecondDose.length - 1]
+					people aged 12+, {props.valuesSecondDose[props.valuesSecondDose.length - 1]
 						.toString()
 						.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-					second doses to adults aged 18+ and{" "}<br />
+					second doses to adults aged 18+ and{" "}
 					{props.valuesThirdDose[props.valuesThirdDose.length - 1]
 						.toString()
 						.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
