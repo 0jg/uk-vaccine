@@ -26,19 +26,21 @@ export default function Home(props) {
 
 	const labels = dateArray.range(
 		new Date("2021-01-10"),
-		new Date("2021-07-31")
+		new Date("2021-12-31"),
 	);
 	labels.reverse();
 
 	// Initialise arrays
 	let dataFirstDose = [];
 	let dataSecondDose = [];
+	let dataThirdDose = [];
 
 	// Add data points to array
 	labels.forEach((item, i) => {
 		const date = new Date(item);
 		dataFirstDose.push({x: date, y: props.valuesFirstDose[i], y0: 0});
 		dataSecondDose.push({x: date, y: props.valuesSecondDose[i], y0: 0});
+		dataThirdDose.push({x: date, y: props.valuesThirdDose[i], y0: 0});
 	});
 
 	return (
@@ -48,43 +50,28 @@ export default function Home(props) {
 					🇬🇧 Vaccines Administered
 				</h1>
 				<h2 className="text-3xl md:text-4xl leading-tight py-4 px-2">
-					Cumulative <span style={{color: "rgb(248, 3, 83)"}}>first</span> and{" "}
-					<span style={{color: "rgb(161, 93, 215)"}}>second</span> doses by
+					Cumulative <span style={{color: "rgb(248, 3, 83)"}}>first</span>,{" "}
+					<span style={{color: "rgb(161, 93, 215)"}}>second</span> and <span style={{color:"rgb(254, 148, 2)"}}>third</span> doses by
 					date.
 				</h2>
 				<h3 className="text-xl md:text-2xl leading-normal pb-4 px-8">
 					The UK has given a first dose to{" "}
-					{Math.round(
-						(100 * props.valuesFirstDose[props.valuesFirstDose.length - 1]) /
-							50000000
-					)}
-					% of all adults{" "}
-					<span className="inline-block">
-						(
-						{props.valuesFirstDose[props.valuesFirstDose.length - 1]
-							.toString()
-							.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-						people)
-					</span>{" "}
-					and has fully vaccinated{" "}
-					{Math.round(
-						(100 * props.valuesSecondDose[props.valuesSecondDose.length - 1]) /
-							50000000
-					)}
-					% of all adults{" "}
-					<span className="inline-block">
-						(
-						{props.valuesSecondDose[props.valuesSecondDose.length - 1]
-							.toString()
-							.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-						people)
-					</span>
-					.
+					{props.valuesFirstDose[props.valuesFirstDose.length - 1]
+						.toString()
+						.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+					people aged 12+,<br/> {props.valuesSecondDose[props.valuesSecondDose.length - 1]
+						.toString()
+						.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+					second doses to adults aged 18+ and{" "}<br />
+					{props.valuesThirdDose[props.valuesThirdDose.length - 1]
+						.toString()
+						.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+					third doses to adults aged 50+.
 				</h3>
 				<div className="w-full h-screen m-auto py-10 pr-10">
 					<FlexibleXYPlot
 						xType="time"
-						yDomain={[0, 50000000]}
+						yDomain={[0, 52632729]}
 						margin={{left: 110, bottom: 110}}
 						className="m-auto dark:text-white text-black fill-current text-md"
 					>
@@ -111,6 +98,12 @@ export default function Home(props) {
 							strokeWidth={5}
 							className="text-transparent fill-current"
 						/>
+						<LineSeries
+							data={dataThirdDose}
+							color="rgb(254, 148, 2)"
+							strokeWidth={5}
+							className="text-transparent fill-current"
+						/>
 						<MarkSeries
 							color="rgb(13, 132, 255)"
 							strokeWidth={5}
@@ -124,7 +117,7 @@ export default function Home(props) {
 						<MarkSeries
 							color="rgb(48, 209, 88)"
 							strokeWidth={5}
-							data={[{x: new Date("2021-07-31T00:00:00.000Z"), y: 50000000}]}
+							data={[{x: new Date("2021-07-31T00:00:00.000Z"), y: 52632729}]}
 						/>
 						<LabelSeries
 							data={[
@@ -140,7 +133,7 @@ export default function Home(props) {
 								},
 								{
 									x: new Date("2021-07-31T00:00:00.000Z"),
-									y: 50000000,
+									y: 52632729,
 									label: "All adults"
 								}
 							]}
@@ -163,6 +156,7 @@ export default function Home(props) {
 export async function getServerSideProps() {
 	let valuesFirstDose = [];
 	let valuesSecondDose = [];
+	let valuesThirdDose = [];
 	let error;
 
 	let resFirstDose = await fetch(
@@ -195,14 +189,31 @@ export async function getServerSideProps() {
 			error = true;
 		});
 
+	let resThirdDose = await fetch(
+		"https://api.coronavirus.data.gov.uk/v2/data?areaType=overview&metric=cumPeopleVaccinatedThirdDoseByPublishDate&format=json"
+	)
+		.then(response => response.json())
+		.then(data => {
+			data.body.forEach(e => {
+				valuesThirdDose.push(e.cumPeopleVaccinatedThirdDoseByPublishDate);
+			});
+			error = false;
+		})
+		.catch(err => {
+			console.error(err);
+			error = true;
+		});
+
 	valuesFirstDose.reverse();
 	valuesSecondDose.reverse();
+	valuesThirdDose.reverse();
 
 	return {
 		props: {
 			error,
 			valuesFirstDose,
-			valuesSecondDose
+			valuesSecondDose,
+			valuesThirdDose
 		}
 	};
 }
