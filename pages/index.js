@@ -28,7 +28,14 @@ export default function Home(props) {
 		new Date("2021-01-10"),
 		new Date("2021-12-31"),
 	);
+
+	const thirdDoseLabels = dateArray.range(
+		new Date("2021-10-01"),
+		new Date("2021-12-31")
+	)
+
 	labels.reverse();
+	thirdDoseLabels.reverse();
 
 	// Initialise arrays
 	let dataFirstDose = [];
@@ -40,12 +47,16 @@ export default function Home(props) {
 		const date = new Date(item);
 		dataFirstDose.push({x: date, y: props.valuesFirstDose[i], y0: 0});
 		dataSecondDose.push({x: date, y: props.valuesSecondDose[i], y0: 0});
+	});
+
+	thirdDoseLabels.forEach((item, i) => {
+		const date = new Date(item);
 		dataThirdDose.push({x: date, y: props.valuesThirdDose[i], y0: 0});
 	});
 
 	return (
 		<main className="flex flex-col items-center justify-center w-screen m-auto min-h-screen dark:bg-black dark:text-white text-center">
-			<div className="w-screen md:max-w-screen-lg">
+			<div className="w-screen-xl md:max-w-screen-lg">
 				<h1 className="text-5xl md:text-7xl font-bold leading-tighter pt-24 px-2">
 					🇬🇧 Vaccines Administered
 				</h1>
@@ -114,11 +125,11 @@ export default function Home(props) {
 							strokeWidth={5}
 							data={[{x: new Date("2021-04-15T00:00:00.000Z"), y: 32000000}]}
 						/>
-						<MarkSeries
+						{/*<MarkSeries
 							color="rgb(48, 209, 88)"
 							strokeWidth={5}
 							data={[{x: new Date("2021-07-31T00:00:00.000Z"), y: 52632729}]}
-						/>
+						/> */}
 						<LabelSeries
 							data={[
 								{
@@ -131,11 +142,11 @@ export default function Home(props) {
 									y: 32000000,
 									label: "Over 50 and at risk"
 								},
-								{
-									x: new Date("2021-07-31T00:00:00.000Z"),
-									y: 52632729,
-									label: "All adults"
-								}
+								// {
+								// 	x: new Date("2021-07-31T00:00:00.000Z"),
+								// 	y: 52632729,
+								// 	label: "All adults"
+								// }
 							]}
 							className="text-green fill-current"
 						/>
@@ -190,12 +201,13 @@ export async function getServerSideProps() {
 		});
 
 	let resThirdDose = await fetch(
-		"https://api.coronavirus.data.gov.uk/v2/data?areaType=overview&metric=cumPeopleVaccinatedThirdDoseByPublishDate&format=json"
+		"https://coronavirus.data.gov.uk/api/v1/data?filters=areaType=overview&structure=%7B%22areaType%22:%22areaType%22,%22areaName%22:%22areaName%22,%22areaCode%22:%22areaCode%22,%22date%22:%22date%22,%22newPeopleVaccinatedThirdInjectionByPublishDate%22:%22newPeopleVaccinatedThirdInjectionByPublishDate%22,%22cumPeopleVaccinatedThirdInjectionByPublishDate%22:%22cumPeopleVaccinatedThirdInjectionByPublishDate%22%7D&format=json"
 	)
 		.then(response => response.json())
 		.then(data => {
-			data.body.forEach(e => {
-				valuesThirdDose.push(e.cumPeopleVaccinatedThirdDoseByPublishDate);
+			console.log(data.data)
+			data.data.forEach(e => {
+				valuesThirdDose.push(e.cumPeopleVaccinatedThirdInjectionByPublishDate);
 			});
 			error = false;
 		})
@@ -203,6 +215,8 @@ export async function getServerSideProps() {
 			console.error(err);
 			error = true;
 		});
+
+	console.log(valuesThirdDose)
 
 	valuesFirstDose.reverse();
 	valuesSecondDose.reverse();
