@@ -63,7 +63,7 @@ export default function Home(props) {
 				<h2 className="text-3xl md:text-4xl leading-tight py-4 px-2">
 					Cumulative <span style={{color: "rgb(248, 3, 83)"}}>first</span>,{" "}
 					<span style={{color: "rgb(161, 93, 215)"}}>second</span> and <span style={{color:"rgb(254, 148, 2)"}}>third</span> doses by
-					date.
+					publication date.
 				</h2>
 				<h3 className="text-xl md:text-2xl leading-normal pb-4 px-8">
 					The UK has given a first dose to{" "}
